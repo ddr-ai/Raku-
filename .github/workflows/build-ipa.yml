@@ -34,19 +34,20 @@ jobs:
       - name: Resolve package dependencies
         run: |
           cd LocalAI
-          xcodebuild -resolvePackageDependencies -project LocalAI.xcodeproj -scheme LocalAI
+          xcodebuild -resolvePackageDependencies -project LocalAI.xcodeproj -target LocalAI
 
       - name: Build .app (unsigned)
         run: |
           cd LocalAI
           xcodebuild clean build \
             -project LocalAI.xcodeproj \
-            -scheme LocalAI \
+            -target LocalAI \
             -configuration Release \
             -destination "generic/platform=iOS" \
             -derivedDataPath build/DerivedData \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGN_IDENTITY="" \
+            PRODUCT_NAME=LocalAI \
             | xcpretty
 
       - name: Find .app
