@@ -10,7 +10,7 @@ let package = Package(
         .library(name: "LocalAI", targets: ["LocalAI"])
     ],
     dependencies: [
-        .package(url: "https://github.com/eastriverlee/LLM.swift", from: "0.1.0")
+        .package(url: "https://github.com/eastriverlee/LLM.swift", from: "1.0.0")
     ],
     targets: [
         .target(
@@ -18,8 +18,11 @@ let package = Package(
             dependencies: [
                 .product(name: "LLM", package: "LLM.swift")
             ],
-            path: "LocalAI",
-            sources: ["App.swift", "ChatView.swift"]
+            path: "LocalAI/LocalAI",
+            sources: ["App.swift", "ChatView.swift"],
+            resources: [
+                .process("Resources")
+            ]
         )
     ]
 )
