@@ -61,7 +61,7 @@
 /* Begin PBXNativeTarget section */
 		2A3E5DAA60AD09F7D6302514 /* LocalAI */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BFDC8AD53FEEFE414381CC63 /* Build configuration list for PBXNativeTarget "LocalAI" */;
+			buildConfigurationList = AAE6E08D0EBC2ED7FE2FD627 /* Build configuration list for PBXNativeTarget "LocalAI" */;
 			buildPhases = (
 				50FA46EDE2BB7997B7FBB8C7 /* Sources */,
 				DF0EE3ADF73AEF1CF97ECDDD /* Frameworks */,
@@ -91,7 +91,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 5EA65E1F64E451405CB6D90E /* Build configuration list for PBXProject "LocalAI" */;
+			buildConfigurationList = 9D8C472F50DCFC3202BC1206 /* Build configuration list for PBXProject "LocalAI" */;
 			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
