@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A1234567890123456789011F"
+               BlueprintIdentifier = "2A3E5DAA60AD09F7D6302514"
                BuildableName = "LocalAI.app"
                BlueprintName = "LocalAI"
                ReferencedContainer = "container:LocalAI.xcodeproj">
@@ -42,7 +42,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A1234567890123456789011F"
+            BlueprintIdentifier = "2A3E5DAA60AD09F7D6302514"
             BuildableName = "LocalAI.app"
             BlueprintName = "LocalAI"
             ReferencedContainer = "container:LocalAI.xcodeproj">
@@ -59,7 +59,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A1234567890123456789011F"
+            BlueprintIdentifier = "2A3E5DAA60AD09F7D6302514"
             BuildableName = "LocalAI.app"
             BlueprintName = "LocalAI"
             ReferencedContainer = "container:LocalAI.xcodeproj">

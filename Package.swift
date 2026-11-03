@@ -19,10 +19,7 @@ let package = Package(
                 .product(name: "LLM", package: "LLM.swift")
             ],
             path: "LocalAI/LocalAI",
-            sources: ["App.swift", "ChatView.swift"],
-            resources: [
-                .process("Resources")
-            ]
+            sources: ["App.swift", "ChatView.swift"]
         )
     ]
 )
