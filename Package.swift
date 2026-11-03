@@ -6,20 +6,9 @@ let package = Package(
     platforms: [
         .iOS(.v17)
     ],
-    products: [
-        .library(name: "LocalAI", targets: ["LocalAI"])
-    ],
+    products: [],
     dependencies: [
         .package(url: "https://github.com/eastriverlee/LLM.swift", from: "1.0.0")
     ],
-    targets: [
-        .target(
-            name: "LocalAI",
-            dependencies: [
-                .product(name: "LLM", package: "LLM.swift")
-            ],
-            path: "LocalAI/LocalAI",
-            sources: ["App.swift", "ChatView.swift"]
-        )
-    ]
+    targets: []
 )
