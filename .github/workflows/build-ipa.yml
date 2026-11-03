@@ -1,4 +1,4 @@
-name: Build and Release iOS App
+name: Build and Release iOS App (Unsigned for Sideloading)
 
 on:
   push:
@@ -13,11 +13,10 @@ on:
 
 permissions:
   contents: write
-  packages: write
 
 jobs:
   build:
-    name: Build IPA
+    name: Build Unsigned IPA
     runs-on: macos-14
     timeout-minutes: 60
     env:
@@ -37,68 +36,31 @@ jobs:
           cd LocalAI
           xcodebuild -resolvePackageDependencies -project LocalAI.xcodeproj -scheme LocalAI
 
-      - name: Import certificates
-        if: env.CERTIFICATE_P12_BASE64 != ''
-        run: |
-          echo "$CERTIFICATE_P12_BASE64" | base64 --decode > certificate.p12
-          security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
-          security default-keychain -s build.keychain
-          security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
-          security import certificate.p12 -k build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple: -s -k "$KEYCHAIN_PASSWORD" build.keychain
-          rm certificate.p12
-        env:
-          CERTIFICATE_P12_BASE64: ${{ secrets.CERTIFICATE_P12_BASE64 }}
-          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
-          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-
-      - name: Import provisioning profile
-        if: env.PROVISIONING_PROFILE_BASE64 != ''
-        run: |
-          echo "$PROVISIONING_PROFILE_BASE64" | base64 --decode > profile.mobileprovision
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
-          rm profile.mobileprovision
-        env:
-          PROVISIONING_PROFILE_BASE64: ${{ secrets.PROVISIONING_PROFILE_BASE64 }}
-
-      - name: Build IPA
+      - name: Build .app (unsigned)
         run: |
           cd LocalAI
-          xcodebuild clean build archive \
+          xcodebuild clean build \
             -project LocalAI.xcodeproj \
             -scheme LocalAI \
             -configuration Release \
-            -archivePath build/LocalAI.xcarchive \
             -destination "generic/platform=iOS" \
-            CODE_SIGN_STYLE=Automatic \
-            DEVELOPMENT_TEAM="${{ secrets.DEVELOPMENT_TEAM }}" \
+            -derivedDataPath build/DerivedData \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_IDENTITY="" \
             | xcpretty
 
-      - name: Export IPA
+      - name: Package IPA manually
         run: |
           cd LocalAI
-          cat > ExportOptions.plist <<EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>method</key>
-    <string>app-store</string>
-    <key>teamID</key>
-    <string>${{ secrets.DEVELOPMENT_TEAM }}</string>
-    <key>signingStyle</key>
-    <string>automatic</string>
-    <key>stripSwiftSymbols</key>
-    <true/>
-</dict>
-</plist>
-EOF
-          xcodebuild -exportArchive \
-            -archivePath build/LocalAI.xcarchive \
-            -exportPath build/ipa \
-            -exportOptionsPlist ExportOptions.plist \
-            | xcpretty
+          APP_PATH=$(find build/DerivedData -name "LocalAI.app" -path "*/Build/Products/Release-iphoneos/*" | head -1)
+          echo "Found app at: $APP_PATH"
+          
+          mkdir -p build/ipa/Payload
+          cp -R "$APP_PATH" build/ipa/Payload/
+          
+          cd build/ipa
+          zip -r LocalAI.ipa Payload
+          echo "IPA created at: $(pwd)/LocalAI.ipa"
 
       - name: Find IPA
         id: find_ipa
